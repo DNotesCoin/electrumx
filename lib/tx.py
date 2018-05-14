@@ -503,3 +503,38 @@ class DeserializerDecred(Deserializer):
             expiry,
             witness
         ), DeserializerDecred.blake256(no_witness_tx)        
+
+
+class TxOutputDNotes(namedtuple("TxOutput", "value invoice pk_script")):
+    '''Class representing a transaction output.'''
+    pass
+
+class TxDNotes(namedtuple("Tx", "version time inputs outputs locktime")):
+    '''Class representing transaction that has a time field.'''
+
+    @cachedproperty
+    def is_coinbase(self):
+        return self.inputs[0].is_coinbase
+
+
+class DeserializerDNotes(Deserializer):
+    def read_tx(self):      
+
+        return TxDNotes(
+            self._read_le_int32(),
+            self._read_le_uint32(),
+            self._read_inputs(),
+            self._read_outputs(),
+            self._read_le_uint32()
+        )
+
+    def _read_outputs(self):
+        read_output = self._read_output
+        return [read_output() for i in range(self._read_varint())]
+
+    def _read_output(self):
+        return TxOutputDNotes(
+            self._read_le_int64(),  # value
+            self._read_varbytes(),  # invoice
+            self._read_varbytes(),  # pk_script
+        )

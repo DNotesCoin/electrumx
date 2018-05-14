@@ -1613,3 +1613,26 @@ class Axe(Dash):
         '''
         import x11_hash
         return x11_hash.getPoWHash(header)
+
+class DNotes(Coin):
+    NAME = "DNotes"
+    SHORTNAME = "NOTE"
+    NET = "mainnet"
+    P2PKH_VERBYTE = bytes.fromhex("3F")
+    P2SH_VERBYTES = [bytes.fromhex("7D")]
+    GENESIS_HASH = ('00001123368370feb0997f471423e4445be205b9947e7053c762886317274d2a')
+    DESERIALIZER = lib_tx.DeserializerDNotes
+    PEER_DEFAULT_PORTS = {'t': '51001', 's': '51002'}
+    PEERS = [
+    ]
+
+
+class DNotesTestnet(DNotes):
+    NAME = "DNotes"
+    SHORTNAME = "NOTE"
+    NET = "testnet"
+    P2PKH_VERBYTE = bytes.fromhex("41")
+    P2SH_VERBYTES = [bytes.fromhex("C4")]
+    GENESIS_HASH = ('00000089c09ef97712b7bde5994e6eb1c6f237cc119a86b77b92c28ef411e2f2')
+    PEERS = [
+    ]
