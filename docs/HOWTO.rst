@@ -33,10 +33,10 @@ You **must** to be running a non-pruning bitcoin daemon with::
   txindex=1
 
 set in its configuration file.  If you have an existing installation
-of bitcoind and have not previously set this you will need to reindex
+of dnotesd and have not previously set this you will need to reindex
 the blockchain with::
 
-  bitcoind -reindex
+  dnotesd -reindex
 
 which can take some time.
 
@@ -260,11 +260,11 @@ from heights 363,000 to 378,000 is the most sluggish::
 
 *Machine A*: a low-spec 2011 1.6GHz AMD E-350 dual-core fanless CPU,
 8GB RAM and a DragonFlyBSD UFS fileystem on an SSD.  It requests
-blocks over the LAN from a bitcoind on machine B.  :envvar:`DB_CACHE`
+blocks over the LAN from a dnotesd on machine B.  :envvar:`DB_CACHE`
 the default of 1,200.  LevelDB.
 
 *Machine B*: a late 2012 iMac running Sierra 10.12.2, 2.9GHz quad-core
-Intel i5 CPU with an HDD and 24GB RAM.  Running bitcoind on the same
+Intel i5 CPU with an HDD and 24GB RAM.  Running dnotesd on the same
 machine.  :envvar:`DB_CACHE` set to 1,800.  LevelDB.
 
 For chains other than bitcoin-mainnet sychronization should be much

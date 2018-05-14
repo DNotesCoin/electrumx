@@ -1618,6 +1618,9 @@ class DNotes(Coin):
     NAME = "DNotes"
     SHORTNAME = "NOTE"
     NET = "mainnet"
+    TX_COUNT = 121000
+    TX_COUNT_HEIGHT = 61218
+    TX_PER_BLOCK = 2
     P2PKH_VERBYTE = bytes.fromhex("3F")
     P2SH_VERBYTES = [bytes.fromhex("7D")]
     GENESIS_HASH = ('00001123368370feb0997f471423e4445be205b9947e7053c762886317274d2a')
@@ -1631,6 +1634,9 @@ class DNotesTestnet(DNotes):
     NAME = "DNotes"
     SHORTNAME = "NOTE"
     NET = "testnet"
+    TX_COUNT = 11684
+    TX_COUNT_HEIGHT = 5819
+    TX_PER_BLOCK = 2
     P2PKH_VERBYTE = bytes.fromhex("41")
     P2SH_VERBYTES = [bytes.fromhex("C4")]
     GENESIS_HASH = ('00000089c09ef97712b7bde5994e6eb1c6f237cc119a86b77b92c28ef411e2f2')
