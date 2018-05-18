@@ -381,3 +381,16 @@ class LegacyRPCDaemon(Daemon):
         if isinstance(t, int):
             return t
         return timegm(strptime(t, "%Y-%m-%d %H:%M:%S %Z"))
+
+
+class DNotesDaemon(FakeEstimateFeeDaemon):
+    '''Handles connections to a daemon at the given URL.
+
+    This class is for the DNotes daemon that implements a separate RPC call called 
+    getrawblock that gets raw blocks'''
+    async def raw_blocks(self, hex_hashes):
+        '''Return the raw binary blocks with the given hex hashes.'''
+        params_iterable = ((h, False) for h in hex_hashes)
+        blocks = await self._send_vector('getrawblock', params_iterable)
+        #Convert hex string to bytes
+        return [hex_to_bytes(block) for block in blocks]

@@ -538,3 +538,17 @@ class DeserializerDNotes(Deserializer):
             self._read_varbytes(),  # invoice
             self._read_varbytes(),  # pk_script
         )
+    
+    def read_header(self, height, static_header_size):
+        '''Return the block header bytes'''
+        start = self.cursor
+        self.cursor = start
+        self.cursor += static_header_size # Block normal header
+        numAddresses = self._read_varint()
+        for i in range(numAddresses):
+            self._read_varint() #variant type
+            self._read_nbytes(20) #address
+            self._read_le_uint64() #balance
+        header_end = self.cursor
+        self.cursor = start
+        return self._read_nbytes(header_end)

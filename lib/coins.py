@@ -1615,20 +1615,39 @@ class Axe(Dash):
         return x11_hash.getPoWHash(header)
 
 class DNotes(Coin):
+    STATIC_BLOCK_HEADERS = False
     NAME = "DNotes"
     SHORTNAME = "NOTE"
     NET = "mainnet"
     TX_COUNT = 121000
     TX_COUNT_HEIGHT = 61218
     TX_PER_BLOCK = 2
+    DAEMON = daemon.DNotesDaemon
     P2PKH_VERBYTE = bytes.fromhex("3F")
     P2SH_VERBYTES = [bytes.fromhex("7D")]
-    GENESIS_HASH = ('00001123368370feb0997f471423e4445be205b9947e7053c762886317274d2a')
+    GENESIS_HASH = ('00001123368370feb0997f471423e444'
+                    '5be205b9947e7053c762886317274d2a')
     DESERIALIZER = lib_tx.DeserializerDNotes
     PEER_DEFAULT_PORTS = {'t': '51001', 's': '51002'}
     PEERS = [
     ]
+    ESTIMATE_FEE = 0.005
+    RELAY_FEE = 0.005
 
+    @classmethod
+    def block_header(cls, block, height):
+        '''Return the block header bytes'''
+        deserializer = cls.DESERIALIZER(block)
+        return deserializer.read_header(height, cls.BASIC_HEADER_SIZE)
+
+    @classmethod
+    def header_hash(cls, header):
+        version, = struct.unpack('<I', header[:4])
+        if version > 6:
+            return double_sha256(header[:80])
+        else:
+            import x13_hash
+            return x13_hash.getPoWHash(header[:80])
 
 class DNotesTestnet(DNotes):
     NAME = "DNotes"
@@ -1639,6 +1658,7 @@ class DNotesTestnet(DNotes):
     TX_PER_BLOCK = 2
     P2PKH_VERBYTE = bytes.fromhex("41")
     P2SH_VERBYTES = [bytes.fromhex("C4")]
-    GENESIS_HASH = ('00000089c09ef97712b7bde5994e6eb1c6f237cc119a86b77b92c28ef411e2f2')
+    GENESIS_HASH = ('00000089c09ef97712b7bde5994e6eb1'
+                    'c6f237cc119a86b77b92c28ef411e2f2')
     PEERS = [
     ]
