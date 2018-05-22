@@ -394,3 +394,11 @@ class DNotesDaemon(FakeEstimateFeeDaemon):
         blocks = await self._send_vector('getrawblock', params_iterable)
         #Convert hex string to bytes
         return [hex_to_bytes(block) for block in blocks]
+
+    async def deserialised_block(self, hex_hash):
+        '''Return the deserialised block with the given hex hash.'''\
+        #return the block in new bitcoin RPC format, for now only tx list is updated
+        block = await self._send_single('getblock', (hex_hash, True))
+        tx = list(map(lambda r: r['txid'], block['tx']))
+        block['tx'] = tx
+        return block
